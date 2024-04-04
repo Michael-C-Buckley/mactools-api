@@ -12,7 +12,7 @@ with open('README.md', 'r', encoding='utf-8') as readme:
     LONG_DESCRIPTION = readme.read()
 
 setup(
-    name='MacTools',
+    name='MacTools API',
     author='Michael Buckley',
     description=DESCRIPTION,
     long_description=LONG_DESCRIPTION,
@@ -22,6 +22,7 @@ setup(
     install_requires=[
         'mactools',
         'fastapi',
+        'uvicorn'
     ],
     keywords=['python','networking','network','mac','oui','ieee','api']
 )
