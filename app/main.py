@@ -1,4 +1,5 @@
 # Python Modules
+from contextlib import asynccontextmanager
 from logging import basicConfig, getLogger, INFO
 from os import makedirs, path
 
@@ -18,12 +19,17 @@ logger = getLogger(__name__)
 
 logger.info('Initialing service Mactools-api.')
 
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(app):
+    logger.info('Initialization completed, service running.')
+    yield
+    logger.warning('Service shut down complete.')
+
+app = FastAPI(lifespan=lifespan)
 limiter = Limiter(key_func=get_remote_address)
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
-logger.info('Initialization completed, service running.')
 
 @app.get('/mac/{mac_address}')
 @limiter.limit("5/second")
