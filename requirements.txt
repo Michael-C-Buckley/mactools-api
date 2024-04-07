@@ -1,3 +1,4 @@
 mactools
 fastapi
+slowapi
 uvicorn

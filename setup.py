@@ -22,6 +22,7 @@ setup(
     install_requires=[
         'mactools',
         'fastapi',
+        'slowapi',
         'uvicorn'
     ],
     keywords=['python','networking','network','mac','oui','ieee','api']

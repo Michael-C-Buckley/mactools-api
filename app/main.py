@@ -1,12 +1,20 @@
 # Third-Party Imports
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from mactools import MacAddress, get_oui_record
 from mactools.tools_common import get_hex_value
 
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
+from slowapi.util import get_remote_address
+
 app = FastAPI()
+limiter = Limiter(key_func=get_remote_address)
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 @app.get('/mac/{mac_address}')
-async def read_mac_details(mac_address: str):
+@limiter.limit("5/second")
+async def read_mac_details(request: Request, mac_address: str):
     """
     Processes and returns a variety of info regarding the MAC/OUI Provided
     """
