@@ -8,6 +8,9 @@ from fastapi import FastAPI, HTTPException, Request
 from mactools import MacAddress, get_oui_record
 from mactools.tools_common import get_hex_value
 
+from hypercorn import Config
+from hypercorn.asyncio import serve
+
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 from slowapi.util import get_remote_address
@@ -78,5 +81,7 @@ async def read_mac_details(request: Request, mac_address: str):
         return oui_record
         
 if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    config = Config()
+    config.bind = [":::8000"]  # Bind to all IPv6 and IPv4 addresses
+    import asyncio
+    asyncio.run(serve(app, config))
