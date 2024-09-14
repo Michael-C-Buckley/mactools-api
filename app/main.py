@@ -55,6 +55,7 @@ async def read_mac_details(request: Request, mac_address: str):
                 'oui': mac.oui,
                 'binary': mac.binary,
                 'decimal': mac.decimal,
+                'full_mac': True,
                 # 'address': mac.oui_record.get('address')
             }
     
@@ -73,5 +74,9 @@ async def read_mac_details(request: Request, mac_address: str):
     # Check partials to see if it matches an 
     elif (oui_record := get_oui_record(mac_address)):
         log_result(200, 'OUI Cache hit')
+        oui_record['full_mac'] = False
         return oui_record
         
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
