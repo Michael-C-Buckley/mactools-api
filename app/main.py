@@ -82,6 +82,8 @@ async def read_mac_details(request: Request, mac_address: str):
         
 if __name__ == "__main__":
     config = Config()
-    config.bind = [":::8000"]  # Bind to all IPv6 and IPv4 addresses
+    config.bind = [":::80"]
+    config.certfile = '/etc/ssl/certs/origin.pem'
+    config.keyfile = '/etc/ssl/private/origin.key'
     import asyncio
     asyncio.run(serve(app, config))
