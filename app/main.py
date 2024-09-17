@@ -34,7 +34,7 @@ app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 
-@app.get('/mac/{mac_address}')
+@app.get('api/v1/mac/{mac_address}')
 @limiter.limit("5/second")
 async def read_mac_details(request: Request, mac_address: str):
     """
@@ -82,7 +82,7 @@ async def read_mac_details(request: Request, mac_address: str):
         
 if __name__ == "__main__":
     config = Config()
-    config.bind = [":::80"]
+    config.bind = [":::8000"]
     config.certfile = '/etc/ssl/certs/origin.pem'
     config.keyfile = '/etc/ssl/private/origin.key'
     import asyncio
